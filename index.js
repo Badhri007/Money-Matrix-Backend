@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const app = express()
 const cors = require("cors");
 
-app.use(cors())
+app.use(cors(["https://money-matrix-frontend.vercel.app/"]))
 app.use(express.json())
 app.use('/', Router);
 
