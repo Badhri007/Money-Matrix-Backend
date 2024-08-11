@@ -26,19 +26,21 @@ const app = express();
 
 // Correctly configure CORS
 const corsOptions = {
-    origin: "https://money-matrix-frontend.vercel.app/",
+    origin: "*",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,
     optionsSuccessStatus: 204
 };
 
-app.use(cors(corsOptions));
-app.use(express.json());
-
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     next();
   });
+
+app.use(cors(corsOptions));
+app.use(express.json());
+
+
 
 app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 
