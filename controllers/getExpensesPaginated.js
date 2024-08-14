@@ -46,6 +46,8 @@ const getExpensesPagination = async (req, res) => {
         const totalPages = Math.ceil(totalEntries / pageSize);
         const paginatedEntries = allEntries.slice(startIndex, startIndex + pageSize);
 
+        console.log("Paginated:",paginatedEntries);
+
         res.json({ entries: paginatedEntries, totalPages });
     } catch (error) {
         console.error('Error fetching expenses:', error);
