@@ -25,7 +25,7 @@ Router.get('/getExpenses',getUserExpenses);
 Router.post('/getExpenseTypeMonthWise',getExpenseTypeMonthWise);
 Router.post('/getExpenseTypeYearWise',getExpenseTypeYearWise);
 
-Router.post('/getExpensesPagination',getExpensesPagination)
+Router.get('/getExpensesPagination',getExpensesPagination)
 
 
 Router.post('/checkUser',async(req,res)=>{
