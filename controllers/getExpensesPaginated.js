@@ -23,29 +23,32 @@ const getExpensesPagination = async (req, res) => {
 
         const expenses = await Expenses.find({ userid: objectId });
 
-        // Flatten entries and transform to desired format
-        const allEntries = [];
-        expenses.forEach(expense => {
-            expense.entry.forEach(entry => {
-                allEntries.push({
-                    entry_name: entry.name,
-                    entry_amount: entry.amount,
-                    entry_type: entry.expense_type,
-                    date: expense.date.toISOString().split('T')[0] // Format date as YYYY-MM-DD
+        // Flatten entries and transform to include the date of the expense
+        const allEntries = expenses.reduce((acc, expense) => {
+            const expenseDate = new Date(expense.date);
+            const formattedDate = expenseDate.toISOString().slice(0, 10); // YYYY-MM-DD
+
+            expense.entries.forEach(entry => {
+                acc.push({
+                    entry_name: entry.entry_name,
+                    entry_amount: entry.entry_amount,
+                    entry_type: entry.entry_type,
+                    date: formattedDate,
                 });
             });
-        });
 
+            return acc;
+        }, []);
+
+        // Pagination
+        const totalEntries = allEntries.length;
+        const totalPages = Math.ceil(totalEntries / pageSize);
         const paginatedEntries = allEntries.slice(startIndex, startIndex + pageSize);
-        const totalPages = Math.ceil(allEntries.length / pageSize);
-
-        console.log(paginatedEntries);
 
         res.json({ entries: paginatedEntries, totalPages });
-
     } catch (error) {
         console.error('Error fetching expenses:', error);
-        res.status(500).json({ message: 'Error fetching expenses' });
+        res.status(500).json({ error: 'An error occurred while fetching expenses' });
     }
 };
 
