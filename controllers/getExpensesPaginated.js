@@ -12,6 +12,7 @@ const getExpensesPagination = async (req, res) => {
         if (!userId) {
             return res.status(400).json({ error: 'User ID is required' });
         }
+
         let objectId;
         if (mongoose.Types.ObjectId.isValid(userId)) {
             objectId = new mongoose.Types.ObjectId(userId);
@@ -21,25 +22,34 @@ const getExpensesPagination = async (req, res) => {
 
         const startIndex = (pageNo - 1) * pageSize;
 
+        console.log("Fetching expenses for user:", objectId);
         const expenses = await Expenses.find({ userid: objectId });
+
+        if (!expenses) {
+            return res.status(404).json({ error: 'No expenses found for the user' });
+        }
 
         // Flatten entries and transform to desired format
         const allEntries = [];
         expenses.forEach(expense => {
-            expense.entry.forEach(entry => {
-                allEntries.push({
-                    entry_name: entry.name,
-                    entry_amount: entry.amount,
-                    entry_type: entry.expense_type,
-                    date: expense.date.toISOString().split('T')[0] // Format date as YYYY-MM-DD
+            if (expense.entries && Array.isArray(expense.entries)) {
+                expense.entries.forEach(entry => {
+                    allEntries.push({
+                        entry_name: entry.name,
+                        entry_amount: entry.amount,
+                        entry_type: entry.expense_type,
+                        date: expense.date.toISOString().split('T')[0] // Format date as YYYY-MM-DD
+                    });
                 });
-            });
+            } else {
+                console.warn(`Expense with ID ${expense._id} has no entries or entries is not an array`);
+            }
         });
 
         const paginatedEntries = allEntries.slice(startIndex, startIndex + pageSize);
         const totalPages = Math.ceil(allEntries.length / pageSize);
 
-        console.log(paginatedEntries);
+        console.log("Paginated entries:", paginatedEntries);
 
         res.json({ entries: paginatedEntries, totalPages });
 
@@ -50,6 +60,7 @@ const getExpensesPagination = async (req, res) => {
 };
 
 module.exports = { getExpensesPagination };
+
 
 // const mongoose = require('mongoose');
 // const Expenses = require('../models/expenseModel');
