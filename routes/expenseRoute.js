@@ -14,6 +14,7 @@ const {getUserExpenses}=require('../controllers/getUserExpenses')
 
 const {getExpenseTypeMonthWise,getExpenseTypeYearWise}=require('../controllers/getExpenseTypeController');
 const { getExpensesPagination } = require('../controllers/getExpensesPaginated');
+const { editExpenseEntry } = require('../controllers/editExpenseEntryController');
 
 Router.post('/storeExpenses', verify, storeExpenses)
 
@@ -25,6 +26,7 @@ Router.get('/getExpenses',getUserExpenses);
 Router.post('/getExpenseTypeMonthWise',getExpenseTypeMonthWise);
 Router.post('/getExpenseTypeYearWise',getExpenseTypeYearWise);
 
+Router.put('/editExpense',editExpenseEntry);
 Router.get('/getExpensesPagination',getExpensesPagination)
 
 
