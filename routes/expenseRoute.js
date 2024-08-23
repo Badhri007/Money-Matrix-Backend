@@ -16,6 +16,8 @@ const {getExpenseTypeMonthWise,getExpenseTypeYearWise}=require('../controllers/g
 const { getExpensesPagination } = require('../controllers/getExpensesPaginated');
 const { editExpenseEntry } = require('../controllers/editExpenseEntryController');
 
+const {deleteExpenseEntry}=require('../controllers/deleteExpenseEntryController');
+
 Router.post('/storeExpenses', verify, storeExpenses)
 
 Router.post('/storeUser',verify,storeUsers)
@@ -28,6 +30,8 @@ Router.post('/getExpenseTypeYearWise',getExpenseTypeYearWise);
 
 Router.put('/editExpense',editExpenseEntry);
 Router.get('/getExpensesPagination',getExpensesPagination)
+
+Router.delete('/deleteExpense',deleteExpenseEntry);
 
 
 Router.post('/checkUser',async(req,res)=>{
