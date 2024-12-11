@@ -38,3 +38,4 @@ mongoose.connect("mongodb+srv://Badhri007:Badlak717@money-matrix.0i3z4s6.mongodb
 app.listen(5000, () => {
     console.log("Server started on port 5000...");
 });
+
